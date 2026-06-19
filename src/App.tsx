@@ -41,11 +41,31 @@ function App() {
   );
 
   //ステータス変更
-  const handleUpdateStatus = (id:number,status:InquiryStatus) =>{
-    setInquiries(inquiries.map((inquiry)=>
-      inquiry.id === id ? {...inquiry,status} : inquiry
-    ))
-  }
+  const handleUpdateStatus = (id: number, status: InquiryStatus) => {
+    setInquiries(
+      inquiries.map((inquiry) =>
+        inquiry.id === id ? { ...inquiry, status } : inquiry,
+      ),
+    );
+  };
+
+  //新規登録
+  const handleAddInquiry = (
+    title: string,
+    content: string,
+    requester: string,
+  ) => {
+    const newInquiry: Inquiry = {
+      id: Date.now(),
+      title,
+      content,
+      requester,
+      status: "pending",
+      created_at: new Date().toISOString(),
+    };
+    setInquiries([...inquiries,newInquiry])
+    setCurrentPage('list')
+  };
 
   return (
     <div>
@@ -62,13 +82,15 @@ function App() {
       )}
 
       {currentPage === "detail" && selectedInquiry && (
-        <InquiryDetailPage 
-        inquiry={selectedInquiry} 
-        onStatusChange={handleUpdateStatus}
+        <InquiryDetailPage
+          inquiry={selectedInquiry}
+          onStatusChange={handleUpdateStatus}
         />
       )}
 
-      {currentPage === "create" && <InquiryCreatePage />}
+      {currentPage === "create" && <InquiryCreatePage 
+      onAddInqury={handleAddInquiry}
+      />}
     </div>
   );
 }

@@ -1,9 +1,9 @@
 import type { Inquiry, InquiryStatus } from "../types/inquiry";
 type Props = {
   inquiry: Inquiry;
-  onStatusChange:(id:number,status:InquiryStatus) => void
+  onStatusChange: (id: number, status: InquiryStatus) => void;
 };
-function InquiryDetailPage({ inquiry,onStatusChange }: Props) {
+function InquiryDetailPage({ inquiry, onStatusChange }: Props) {
   return (
     <div>
       <p>内容:{inquiry.content}</p>

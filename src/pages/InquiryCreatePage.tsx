@@ -1,4 +1,36 @@
-function InquiryCreatePage() {
-  return <div>作成画面</div>;
+import { useState } from "react";
+
+type Props = {
+  onAddInqury: (title: string, content: string, requester: string) => void;
+};
+
+function InquiryCreatePage({ onAddInqury }: Props) {
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [requester, setRequester] = useState("");
+  return (
+    <div>
+      <input
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        placeholder="タイトル"
+      />
+      <br />
+
+      <textarea
+        value={content}
+        onChange={(e) => setContent(e.target.value)}
+        placeholder="内容"
+      />
+      <br />
+
+      <input
+        value={requester}
+        onChange={(e) => setRequester(e.target.value)}
+        placeholder="依頼者"
+      />
+      <button onClick={() => onAddInqury(title,content,requester)}>登録</button>
+    </div>
+  );
 }
-export default InquiryCreatePage
+export default InquiryCreatePage;
