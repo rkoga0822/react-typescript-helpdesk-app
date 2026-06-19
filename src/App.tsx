@@ -10,24 +10,7 @@ function App() {
   const [currentPage, setCurrentPage] = useState<Page>("list");
   const [selectedId, setSelectedId] = useState<number | null>(null);
 
-  const [inquiries, setInquiries] = useState<Inquiry[]>([
-    {
-      id: 1,
-      title: "PCが起動しない",
-      content: "電源を押しても起動しません",
-      requester: "山田",
-      status: "pending",
-      created_at: "2026-06-19",
-    },
-    {
-      id: 2,
-      title: "テスト",
-      content: "テスト中",
-      requester: "テストさん",
-      status: "completed",
-      created_at: "2026-06-19",
-    },
-  ]);
+  const [inquiries, setInquiries] = useState<Inquiry[]>([]);
 
   //詳細画面用のid取得とcurrentPageをdetailに変更する
   const handleSelectedId = (id: number) => {
@@ -63,9 +46,11 @@ function App() {
       status: "pending",
       created_at: new Date().toISOString(),
     };
-    setInquiries([...inquiries,newInquiry])
-    setCurrentPage('list')
+    setInquiries([...inquiries, newInquiry]);
+    setCurrentPage("list");
   };
+
+  
 
   return (
     <div>
@@ -85,12 +70,13 @@ function App() {
         <InquiryDetailPage
           inquiry={selectedInquiry}
           onStatusChange={handleUpdateStatus}
+          onBack={()=>setCurrentPage("list")}
         />
       )}
 
-      {currentPage === "create" && <InquiryCreatePage 
-      onAddInqury={handleAddInquiry}
-      />}
+      {currentPage === "create" && (
+        <InquiryCreatePage onAddInquiry={handleAddInquiry} />
+      )}
     </div>
   );
 }

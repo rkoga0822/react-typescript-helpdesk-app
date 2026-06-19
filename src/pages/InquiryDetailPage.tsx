@@ -2,8 +2,10 @@ import type { Inquiry, InquiryStatus } from "../types/inquiry";
 type Props = {
   inquiry: Inquiry;
   onStatusChange: (id: number, status: InquiryStatus) => void;
+  onBack:()=>void
 };
-function InquiryDetailPage({ inquiry, onStatusChange }: Props) {
+function InquiryDetailPage({ inquiry, onStatusChange,onBack }: Props) {
+
   return (
     <div>
       <p>内容:{inquiry.content}</p>
@@ -19,6 +21,8 @@ function InquiryDetailPage({ inquiry, onStatusChange }: Props) {
         <option value="in_progress">対応中</option>
         <option value="completed">完了</option>
       </select>
+      <br />
+      <button onClick={onBack}>戻る</button>
     </div>
   );
 }

@@ -1,10 +1,10 @@
 import { useState } from "react";
 
 type Props = {
-  onAddInqury: (title: string, content: string, requester: string) => void;
+  onAddInquiry: (title: string, content: string, requester: string) => void;
 };
 
-function InquiryCreatePage({ onAddInqury }: Props) {
+function InquiryCreatePage({ onAddInquiry }: Props) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [requester, setRequester] = useState("");
@@ -29,7 +29,7 @@ function InquiryCreatePage({ onAddInqury }: Props) {
         onChange={(e) => setRequester(e.target.value)}
         placeholder="依頼者"
       />
-      <button onClick={() => onAddInqury(title,content,requester)}>登録</button>
+      <button onClick={() => onAddInquiry(title,content,requester)}>登録</button>
     </div>
   );
 }
