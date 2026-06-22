@@ -23,6 +23,7 @@ export function useInquiries() {
     };
 
     setInquiries((prev) => [...prev, newInquiry]);
+    
   };
 
   const updateStatus = (

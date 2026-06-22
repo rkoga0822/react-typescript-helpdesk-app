@@ -3,7 +3,7 @@ import styles from "./Button.module.css";
 
 type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
   children: ReactNode;
-  variant?: "primary" | "secondary" | "filter";
+  variant?: "primary" | "secondary" | "filter" | "danger";
   active?: boolean;
 };
 

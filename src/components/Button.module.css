@@ -30,3 +30,8 @@
   background-color: #0188ff;
   color: white;
 }
+
+.danger {
+  background-color: #dc3545;
+  color: white;
+}

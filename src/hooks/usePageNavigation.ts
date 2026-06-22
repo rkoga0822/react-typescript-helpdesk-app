@@ -1,16 +1,11 @@
 import { useState } from "react";
 
-type Page =
-  | "list"
-  | "detail"
-  | "create";
+type Page = "list" | "detail" | "create";
 
 export function usePageNavigation() {
-  const [currentPage, setCurrentPage] =
-    useState<Page>("list");
+  const [currentPage, setCurrentPage] = useState<Page>("list");
 
-  const [selectedId, setSelectedId] =
-    useState<number | null>(null);
+  const [selectedId, setSelectedId] = useState<number | null>(null);
 
   const showList = () => {
     setCurrentPage("list");

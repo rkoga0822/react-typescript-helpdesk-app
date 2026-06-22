@@ -1,3 +1,4 @@
+import Button from "../components/Button";
 import { inquiryStatusLabel, type Inquiry } from "../types/inquiry";
 import styles from "./InquiryListPage.module.css";
 
@@ -28,15 +29,17 @@ function InquiryListPage({
             ステータス：
             {inquiryStatusLabel[inquiry.status]}
           </p>
+          <p>{inquiry.created_at}</p>
 
-          <button
+          <Button
+            variant="danger"
             onClick={(e) => {
               e.stopPropagation();
               onDeleteInquiry(inquiry.id);
             }}
           >
             削除
-          </button>
+          </Button>
         </div>
       ))}
     </div>

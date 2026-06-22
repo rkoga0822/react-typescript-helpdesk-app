@@ -11,22 +11,29 @@ import { usePageNavigation } from "./hooks/usePageNavigation";
 import { useInquiries } from "./hooks/useInquiries";
 import { sortInquiries, type SortType } from "./utils/sortInquiries";
 function App() {
+  //CRUD系まとめたCustomHook
   const { inquiries, addInquiry, updateStatus, deleteInquiry } = useInquiries();
 
+  //ページ遷移のCustomHook
   const { currentPage, selectedId, showList, showCreate, showDetail } =
     usePageNavigation();
 
+  //ステータス状態管理
   const [filter, setFilter] = useState<InquiryFilter>("all");
 
-  const selectedInquiry = inquiries.find((i) => i.id === selectedId);
-
-  const [sort, setSort] = useState<SortType>("newest");
-
+  //ステータス変更
   const handleFilterChange = (filter: InquiryFilter) => {
     setFilter(filter);
     showList();
   };
 
+  //どの問い合わせかの状態管理
+  const selectedInquiry = inquiries.find((i) => i.id === selectedId);
+
+  //並び替えの状態管理
+  const [sort, setSort] = useState<SortType>("newest");
+
+  //追加と追加後listに遷移
   const handleAddInquiry = (
     title: string,
     content: string,
