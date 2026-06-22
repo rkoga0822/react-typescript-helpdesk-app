@@ -14,3 +14,5 @@ export type Inquiry = {
   status: InquiryStatus;
   created_at: string;
 };
+
+export type InquiryFilter = 'all' | 'pending' | 'in_progress' | 'completed'

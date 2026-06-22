@@ -2,7 +2,8 @@ import { useState } from "react";
 import InquiryListPage from "./pages/InquiryListPage";
 import InquiryDetailPage from "./pages/InquiryDetailPage";
 import InquiryCreatePage from "./pages/InquiryCreatePage";
-import type { Inquiry, InquiryStatus } from "./types/inquiry";
+import type { Inquiry, InquiryFilter, InquiryStatus } from "./types/inquiry";
+import Filter from "./components/Filter";
 
 type Page = "list" | "detail" | "create";
 
@@ -50,7 +51,15 @@ function App() {
     setCurrentPage("list");
   };
 
-  
+  //フィルター機能
+  const [filter, setFilter] = useState<InquiryFilter>("all");
+
+  const filteredInquiries = inquiries.filter((inquiry) => {
+    if (filter === "pending") return inquiry.status === "pending";
+    if (filter === "completed") return inquiry.status === "completed";
+    if (filter === "in_progress") return inquiry.status === "in_progress";
+    return true;
+  });
 
   return (
     <div>
@@ -58,10 +67,17 @@ function App() {
       <button onClick={() => setCurrentPage("list")}>一覧</button>
 
       <button onClick={() => setCurrentPage("create")}>新規作成</button>
+      <br />
+
+      <Filter 
+      onFilterChange={setFilter}
+      count={filteredInquiries.length}
+      />
+     
 
       {currentPage === "list" && (
         <InquiryListPage
-          inquiries={inquiries}
+          inquiries={filteredInquiries}
           onSelectInquiry={handleSelectedId}
         />
       )}
@@ -70,7 +86,7 @@ function App() {
         <InquiryDetailPage
           inquiry={selectedInquiry}
           onStatusChange={handleUpdateStatus}
-          onBack={()=>setCurrentPage("list")}
+          onBack={() => setCurrentPage("list")}
         />
       )}
 
