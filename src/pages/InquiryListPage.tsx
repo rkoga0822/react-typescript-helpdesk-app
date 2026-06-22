@@ -4,8 +4,13 @@ import styles from "./InquiryListPage.module.css";
 type Props = {
   inquiries: Inquiry[];
   onSelectInquiry: (id: number) => void;
+  onDeleteInquiry: (id: number) => void;
 };
-function InquiryListPage({ inquiries, onSelectInquiry }: Props) {
+function InquiryListPage({
+  inquiries,
+  onSelectInquiry,
+  onDeleteInquiry,
+}: Props) {
   if (inquiries.length === 0) {
     return <p className={styles.empty}>該当する問い合わせはありません</p>;
   }
@@ -23,6 +28,15 @@ function InquiryListPage({ inquiries, onSelectInquiry }: Props) {
             ステータス：
             {inquiryStatusLabel[inquiry.status]}
           </p>
+
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onDeleteInquiry(inquiry.id);
+            }}
+          >
+            削除
+          </button>
         </div>
       ))}
     </div>

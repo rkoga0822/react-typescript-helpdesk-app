@@ -2,79 +2,52 @@ import { useState } from "react";
 import InquiryListPage from "./pages/InquiryListPage";
 import InquiryDetailPage from "./pages/InquiryDetailPage";
 import InquiryCreatePage from "./pages/InquiryCreatePage";
-import type { Inquiry, InquiryFilter, InquiryStatus } from "./types/inquiry";
+import type { InquiryFilter } from "./types/inquiry";
 import Filter from "./components/Filter";
 import Button from "./components/Button";
 import "./App.css";
-type Page = "list" | "detail" | "create";
-
+import { filterInquiries } from "./utils/filterInquiries";
+import { usePageNavigation } from "./hooks/usePageNavigation";
+import { useInquiries } from "./hooks/useInquiries";
+import { sortInquiries, type SortType } from "./utils/sortInquiries";
 function App() {
-  const [currentPage, setCurrentPage] = useState<Page>("list");
-  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const { inquiries, addInquiry, updateStatus, deleteInquiry } = useInquiries();
 
-  const [inquiries, setInquiries] = useState<Inquiry[]>([]);
+  const { currentPage, selectedId, showList, showCreate, showDetail } =
+    usePageNavigation();
 
-  //詳細画面用のid取得とcurrentPageをdetailに変更する
-  const handleSelectedId = (id: number) => {
-    setSelectedId(id);
-    setCurrentPage("detail");
+  const [filter, setFilter] = useState<InquiryFilter>("all");
+
+  const selectedInquiry = inquiries.find((i) => i.id === selectedId);
+
+  const [sort, setSort] = useState<SortType>("newest");
+
+  const handleFilterChange = (filter: InquiryFilter) => {
+    setFilter(filter);
+    showList();
   };
 
-  //取得したidから詳細を持ってくる
-  const selectedInquiry = inquiries.find(
-    (inquiry) => inquiry.id === selectedId,
-  );
-
-  //ステータス変更
-  const handleUpdateStatus = (id: number, status: InquiryStatus) => {
-    setInquiries(
-      inquiries.map((inquiry) =>
-        inquiry.id === id ? { ...inquiry, status } : inquiry,
-      ),
-    );
-  };
-
-  //新規登録
   const handleAddInquiry = (
     title: string,
     content: string,
     requester: string,
   ) => {
-    const newInquiry: Inquiry = {
-      id: Date.now(),
-      title,
-      content,
-      requester,
-      status: "pending",
-      created_at: new Date().toISOString(),
-    };
-    setInquiries([...inquiries, newInquiry]);
-    setCurrentPage("list");
+    addInquiry(title, content, requester);
+    showList();
   };
 
-  //フィルター機能
-  const [filter, setFilter] = useState<InquiryFilter>("all");
+  const filteredInquiries = filterInquiries(inquiries, filter);
 
-  const filteredInquiries = inquiries.filter((inquiry) => {
-    if (filter === "pending") return inquiry.status === "pending";
-    if (filter === "completed") return inquiry.status === "completed";
-    if (filter === "in_progress") return inquiry.status === "in_progress";
-    return true;
-  });
-
-  const handleFilterChange = (filter: InquiryFilter) => {
-    setFilter(filter);
-    setCurrentPage("list");
-  };
+  const displayedInquiries = sortInquiries(filteredInquiries, sort);
 
   return (
     <div className="app">
       <h1 className="title">ヘルプデスク</h1>
       <div className="navigation">
-        <Button onClick={() => setCurrentPage("list")} variant="secondary">
+        <Button onClick={showList} variant="secondary">
           一覧
         </Button>
-        <Button onClick={() => setCurrentPage("create")} variant="primary">
+        <Button onClick={showCreate} variant="primary">
           新規作成
         </Button>
         <br />
@@ -84,20 +57,23 @@ function App() {
         onFilterChange={handleFilterChange}
         count={filteredInquiries.length}
         currentFilter={filter}
+        sort={sort}
+        onSortChange={setSort}
       />
 
       {currentPage === "list" && (
         <InquiryListPage
-          inquiries={filteredInquiries}
-          onSelectInquiry={handleSelectedId}
+          inquiries={displayedInquiries}
+          onSelectInquiry={showDetail}
+          onDeleteInquiry={deleteInquiry}
         />
       )}
 
       {currentPage === "detail" && selectedInquiry && (
         <InquiryDetailPage
           inquiry={selectedInquiry}
-          onStatusChange={handleUpdateStatus}
-          onBack={() => setCurrentPage("list")}
+          onStatusChange={updateStatus}
+          onBack={showList}
         />
       )}
 
