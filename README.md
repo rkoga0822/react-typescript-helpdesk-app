@@ -1,73 +1,171 @@
-# React + TypeScript + Vite
+# ヘルプデスクアプリ
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+社内の問い合わせを管理するためのシンプルなヘルプデスクアプリです。
 
-Currently, two official plugins are available:
+## 概要
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+問い合わせの登録から対応状況の管理までを行える React + TypeScript 製のアプリケーションです。
 
-## React Compiler
+問い合わせを一覧で確認し、詳細画面からステータスを更新できます。また、フィルターや並び替え機能により効率的に問い合わせを管理できます。
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 機能
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 問い合わせ管理
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+* 問い合わせの新規登録
+* 問い合わせ一覧表示
+* 問い合わせ詳細表示
+* 問い合わせ削除
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### ステータス管理
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+* 未対応
+* 対応中
+* 完了
+
+詳細画面からステータスを変更できます。
+
+### フィルター機能
+
+問い合わせをステータスごとに絞り込みできます。
+
+* 全て
+* 未対応
+* 対応中
+* 完了
+
+### 並び替え機能
+
+* 新しい順
+* 古い順
+* ステータス順
+
+### バリデーション
+
+React Hook Form と Zod を利用し、以下の入力チェックを実施しています。
+
+* タイトル必須
+* 内容必須
+* 依頼者必須
+
+---
+
+## 使用技術
+
+### フロントエンド
+
+* React 19
+* TypeScript 6
+* Vite 8
+
+### ライブラリ
+
+* React Hook Form
+* Zod
+* @hookform/resolvers
+
+---
+
+## ディレクトリ構成
+
+```text
+src/
+├── components/
+│   ├── Button.tsx
+│   ├── Button.module.css
+│   ├── Filter.tsx
+│   └── Filter.module.tsx
+│
+├── hooks/
+│   ├── useInquiries.ts
+│   └── usePageNavigation.ts
+│
+├── pages/
+│   ├── InquiryListPage.tsx
+│   ├── InquiryListPage.module.css
+│   ├── InquiryDetailPage.tsx
+│   ├── InquiryDetailPage.module.css
+│   ├── InquiryCreatePage.tsx
+│   └── InquiryCreatePage.module.css
+│
+├── types/
+│   └── inquiry.ts
+│
+├── utils/
+│   ├── filterInquiries.ts
+│   └── sortInquiries.ts
+│
+└── App.tsx
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 設計方針
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+責務ごとにコードを分割しています。
+
+### hooks
+
+状態管理や画面遷移を管理
+
+* useInquiries
+* usePageNavigation
+
+### utils
+
+データ加工処理を管理
+
+* filterInquiries
+* sortInquiries
+
+### components
+
+再利用可能な UI 部品
+
+* Button
+* Filter
+
+### pages
+
+画面単位のコンポーネント
+
+* InquiryListPage
+* InquiryDetailPage
+* InquiryCreatePage
+
+---
+
+## 起動方法
+
+### インストール
+
+```bash
+npm install
 ```
+
+### 開発サーバー起動
+
+```bash
+npm run dev
+```
+
+---
+
+## 今後の改善案
+
+* LocalStorage を利用したデータ永続化
+* 検索機能
+* ページルーティング（React Router）
+* API サーバーとの連携
+* 編集機能の追加
+* ダークモード対応
+
+---
+
+## 注意事項
+
+現在は useState でデータを管理しています。
+
+そのためブラウザをリロードすると登録した問い合わせデータは消去されます。
