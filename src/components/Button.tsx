@@ -1,11 +1,10 @@
-import type { ReactNode } from "react";
+import type { ButtonHTMLAttributes, ReactNode } from "react";
 import styles from "./Button.module.css";
 
-type Props = {
+type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
   children: ReactNode;
-  onClick: () => void;
-  active?: boolean;
   variant?: "primary" | "secondary" | "filter";
+  active?: boolean;
 };
 
 function Button({
@@ -13,9 +12,11 @@ function Button({
   onClick,
   active = false,
   variant = "primary",
+  type = "button",
 }: Props) {
   return (
     <button
+      type={type}
       onClick={onClick}
       className={`
     ${styles.button}
