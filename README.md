@@ -76,7 +76,7 @@ src/
 │   ├── Button.tsx
 │   ├── Button.module.css
 │   ├── Filter.tsx
-│   └── Filter.module.tsx
+│   └── Filter.module.css
 │
 ├── hooks/
 │   ├── useInquiries.ts
