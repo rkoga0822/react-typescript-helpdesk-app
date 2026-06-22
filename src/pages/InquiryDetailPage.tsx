@@ -1,11 +1,14 @@
 import Button from "../components/Button";
 import type { Inquiry, InquiryStatus } from "../types/inquiry";
 import styles from "./InquiryDetailPage.module.css";
+
 type Props = {
   inquiry: Inquiry;
   onStatusChange: (id: number, status: InquiryStatus) => void;
   onBack: () => void;
 };
+
+// 問い合わせ詳細画面
 function InquiryDetailPage({ inquiry, onStatusChange, onBack }: Props) {
   return (
     <div className={styles.container}>

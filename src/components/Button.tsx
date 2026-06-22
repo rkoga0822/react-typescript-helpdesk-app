@@ -7,6 +7,7 @@ type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
   active?: boolean;
 };
 
+// アプリ共通で利用するボタンコンポーネント
 function Button({
   children,
   onClick,

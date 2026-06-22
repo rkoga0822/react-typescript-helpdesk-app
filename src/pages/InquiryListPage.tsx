@@ -7,14 +7,18 @@ type Props = {
   onSelectInquiry: (id: number) => void;
   onDeleteInquiry: (id: number) => void;
 };
+
+// 問い合わせ一覧画面
 function InquiryListPage({
   inquiries,
   onSelectInquiry,
   onDeleteInquiry,
 }: Props) {
+  // 該当データがない場合の表示
   if (inquiries.length === 0) {
     return <p className={styles.empty}>該当する問い合わせはありません</p>;
   }
+  
   return (
     <div className={styles.list}>
       {inquiries.map((inquiry) => (

@@ -1,5 +1,6 @@
 import type { Inquiry, InquiryFilter } from "../types/inquiry";
 
+// ステータスで問い合わせを絞り込む
 export function filterInquiries(inquiries: Inquiry[], filter: InquiryFilter) {
   if (filter === "pending") {
     return inquiries.filter((i) => i.status === "pending");

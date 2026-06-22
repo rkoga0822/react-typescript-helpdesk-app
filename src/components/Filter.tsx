@@ -1,7 +1,6 @@
 import type { InquiryFilter } from "../types/inquiry";
 import Button from "./Button";
 import styles from "./Filter.module.css";
-import { FILTER_OPTIONS } from "../types/inquiry";
 import type { SortType } from "../utils/sortInquiries";
 
 type Props = {
@@ -12,13 +11,15 @@ type Props = {
   onSortChange: (sort: SortType) => void;
 };
 
-function Filter({
-  onFilterChange,
-  count,
-  currentFilter,
-  sort,
-  onSortChange,
-}: Props) {
+const FILTER_OPTIONS = [
+  { value: "all", label: "全て" },
+  { value: "pending", label: "未対応" },
+  { value: "in_progress", label: "対応中" },
+  { value: "completed", label: "完了" },
+] as const;
+
+// 問い合わせの絞り込み・並び替えを行うコンポーネント
+function Filter({ onFilterChange, count, currentFilter, sort, onSortChange, }: Props) {
   return (
     <div className={styles.filterContainer}>
       {FILTER_OPTIONS.map((filter) => (

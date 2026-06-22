@@ -4,10 +4,12 @@ import type {
   InquiryStatus,
 } from "../types/inquiry";
 
+// 問い合わせデータの管理を行うカスタムフック
 export function useInquiries() {
   const [inquiries, setInquiries] =
     useState<Inquiry[]>([]);
 
+  // 問い合わせを新規登録
   const addInquiry = (
     title: string,
     content: string,
@@ -26,6 +28,7 @@ export function useInquiries() {
     
   };
 
+  // 問い合わせのステータスを更新
   const updateStatus = (
     id: number,
     status: InquiryStatus
@@ -39,6 +42,7 @@ export function useInquiries() {
     );
   };
 
+  // 問い合わせを削除
   const deleteInquiry = (id: number) => {
   setInquiries((prev) =>
     prev.filter((inquiry) => inquiry.id !== id)

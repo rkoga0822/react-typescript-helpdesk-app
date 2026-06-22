@@ -12,16 +12,17 @@ import { useInquiries } from "./hooks/useInquiries";
 import { sortInquiries, type SortType } from "./utils/sortInquiries";
 function App() {
   //CRUD系まとめたCustomHook
+  // 問い合わせデータ管理
   const { inquiries, addInquiry, updateStatus, deleteInquiry } = useInquiries();
 
   //ページ遷移のCustomHook
   const { currentPage, selectedId, showList, showCreate, showDetail } =
     usePageNavigation();
 
-  //ステータス状態管理
+  //フィルター状態管理
   const [filter, setFilter] = useState<InquiryFilter>("all");
 
-  //ステータス変更
+  //並び替え
   const handleFilterChange = (filter: InquiryFilter) => {
     setFilter(filter);
     showList();
@@ -34,6 +35,7 @@ function App() {
   const [sort, setSort] = useState<SortType>("newest");
 
   //追加と追加後listに遷移
+  // 問い合わせ登録後は一覧画面へ戻す
   const handleAddInquiry = (
     title: string,
     content: string,
@@ -43,8 +45,10 @@ function App() {
     showList();
   };
 
+  // フィルター適用
   const filteredInquiries = filterInquiries(inquiries, filter);
 
+  // 並び替え適用
   const displayedInquiries = sortInquiries(filteredInquiries, sort);
 
   return (

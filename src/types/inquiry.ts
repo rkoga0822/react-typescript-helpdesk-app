@@ -17,9 +17,3 @@ export type Inquiry = {
 
 export type InquiryFilter = "all" | "pending" | "in_progress" | "completed";
 
-export const FILTER_OPTIONS = [
-  { value: "all", label: "全て" },
-  { value: "pending", label: "未対応" },
-  { value: "in_progress", label: "対応中" },
-  { value: "completed", label: "完了" },
-] as const;

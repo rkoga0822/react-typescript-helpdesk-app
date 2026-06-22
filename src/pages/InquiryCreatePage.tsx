@@ -9,15 +9,16 @@ type Props = {
 };
 
 const schema = z.object({
-  title: z.string().min(1, "タイトルは必須です"),
+  title: z.string().min(2, "タイトルは必須です"),
   content: z.string().min(1, "内容は必須です"),
   requester: z.string().min(1, "依頼者は必須です"),
 });
 
 type FormData = z.infer<typeof schema>;
 
+// 問い合わせ登録フォーム
 function InquiryCreatePage({ onAddInquiry }: Props) {
-  //reacthookform
+  // React Hook Form + Zod によるフォーム管理
   const {
     register,
     handleSubmit,
@@ -25,6 +26,7 @@ function InquiryCreatePage({ onAddInquiry }: Props) {
     reset,
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
+  // フォーム送信時の処理
   const onSubmit = (data: FormData) => {
     onAddInquiry(data.title, data.content, data.requester);
     reset();
