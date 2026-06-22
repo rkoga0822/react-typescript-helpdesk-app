@@ -1,4 +1,6 @@
 import { useState } from "react";
+import Button from "../components/Button";
+import styles from "./InquiryCreatePage.module.css";
 
 type Props = {
   onAddInquiry: (title: string, content: string, requester: string) => void;
@@ -9,8 +11,9 @@ function InquiryCreatePage({ onAddInquiry }: Props) {
   const [content, setContent] = useState("");
   const [requester, setRequester] = useState("");
   return (
-    <div>
+    <div className={styles.form}>
       <input
+        className={styles.input}
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         placeholder="タイトル"
@@ -18,6 +21,7 @@ function InquiryCreatePage({ onAddInquiry }: Props) {
       <br />
 
       <textarea
+        className={styles.textarea}
         value={content}
         onChange={(e) => setContent(e.target.value)}
         placeholder="内容"
@@ -25,11 +29,17 @@ function InquiryCreatePage({ onAddInquiry }: Props) {
       <br />
 
       <input
+        className={styles.input}
         value={requester}
         onChange={(e) => setRequester(e.target.value)}
         placeholder="依頼者"
       />
-      <button onClick={() => onAddInquiry(title,content,requester)}>登録</button>
+      <Button
+        onClick={() => onAddInquiry(title, content, requester)}
+        variant="primary"
+      >
+        登録
+      </Button>
     </div>
   );
 }

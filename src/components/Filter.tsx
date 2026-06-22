@@ -1,18 +1,36 @@
 import type { InquiryFilter } from "../types/inquiry";
+import Button from "./Button";
+import styles from "./Filter.module.css";
 
 type Props = {
-    onFilterChange:(filter:InquiryFilter)=>void
-    count:number
-}
+  onFilterChange: (filter: InquiryFilter) => void;
+  count: number;
+  currentFilter: InquiryFilter;
+};
 
-function Filter({onFilterChange,count}:Props) {
+const filters: {
+  value: InquiryFilter;
+  label: string;
+}[] = [
+  { value: "all", label: "全て" },
+  { value: "pending", label: "未対応" },
+  { value: "in_progress", label: "対応中" },
+  { value: "completed", label: "完了" },
+];
+
+function Filter({ onFilterChange, count, currentFilter }: Props) {
   return (
-    <div>
-      <button onClick={() => onFilterChange("all")}>全て</button>
-      <button onClick={() => onFilterChange("pending")}>未対応</button>
-      <button onClick={() => onFilterChange("in_progress")}>対応中</button>
-      <button onClick={() => onFilterChange("completed")}>完了</button>
-       <p>件数: {count}件</p>
+    <div className={styles.filterContainer}>
+      {filters.map((filter) => (
+        <Button
+          variant="filter"
+          active={currentFilter === filter.value}
+          onClick={() => onFilterChange(filter.value)}
+        >
+          {filter.label}
+        </Button>
+      ))}
+      <span className={styles.count}>{count}件</span>
     </div>
   );
 }

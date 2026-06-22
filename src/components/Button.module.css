@@ -1,0 +1,32 @@
+.button {
+  border: none;
+  border-radius: 8px;
+  padding: 10px 18px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 14px;
+}
+
+.button:hover {
+  opacity: 0.9;
+}
+
+.primary {
+  background-color: #0188ff;
+  color: white;
+}
+
+.secondary {
+  background-color: #6b7280;
+  color: white;
+}
+
+.filter {
+  background-color: white;
+  border: 1px solid #d1d5db;
+}
+
+.active {
+  background-color: #0188ff;
+  color: white;
+}

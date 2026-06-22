@@ -1,0 +1,23 @@
+body {
+  margin: 0;
+  background-color: #f5f7fa;
+  font-family: sans-serif;
+}
+
+.app {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.title {
+  text-align: center;
+  color: #0188ff;
+  margin-bottom: 24px;
+}
+
+.navigation {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}

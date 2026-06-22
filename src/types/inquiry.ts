@@ -15,4 +15,4 @@ export type Inquiry = {
   created_at: string;
 };
 
-export type InquiryFilter = 'all' | 'pending' | 'in_progress' | 'completed'
+export type InquiryFilter = "all" | "pending" | "in_progress" | "completed";

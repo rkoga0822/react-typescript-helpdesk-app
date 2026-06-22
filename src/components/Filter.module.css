@@ -1,0 +1,12 @@
+.filterContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.count {
+  margin-left: auto;
+  font-weight: bold;
+}

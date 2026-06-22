@@ -4,7 +4,8 @@ import InquiryDetailPage from "./pages/InquiryDetailPage";
 import InquiryCreatePage from "./pages/InquiryCreatePage";
 import type { Inquiry, InquiryFilter, InquiryStatus } from "./types/inquiry";
 import Filter from "./components/Filter";
-
+import Button from "./components/Button";
+import "./App.css";
 type Page = "list" | "detail" | "create";
 
 function App() {
@@ -61,19 +62,29 @@ function App() {
     return true;
   });
 
+  const handleFilterChange = (filter: InquiryFilter) => {
+    setFilter(filter);
+    setCurrentPage("list");
+  };
+
   return (
-    <div>
-      <h1>ヘルプデスク</h1>
-      <button onClick={() => setCurrentPage("list")}>一覧</button>
+    <div className="app">
+      <h1 className="title">ヘルプデスク</h1>
+      <div className="navigation">
+        <Button onClick={() => setCurrentPage("list")} variant="secondary">
+          一覧
+        </Button>
+        <Button onClick={() => setCurrentPage("create")} variant="primary">
+          新規作成
+        </Button>
+        <br />
+      </div>
 
-      <button onClick={() => setCurrentPage("create")}>新規作成</button>
-      <br />
-
-      <Filter 
-      onFilterChange={setFilter}
-      count={filteredInquiries.length}
+      <Filter
+        onFilterChange={handleFilterChange}
+        count={filteredInquiries.length}
+        currentFilter={filter}
       />
-     
 
       {currentPage === "list" && (
         <InquiryListPage
