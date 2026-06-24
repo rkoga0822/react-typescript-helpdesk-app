@@ -1,58 +1,58 @@
-import { useState } from "react";
-import type {
-  Inquiry,
-  InquiryStatus,
-} from "../types/inquiry";
+import { useEffect, useState } from "react";
+import type { Inquiry } from "../types/inquiry";
+import { inquiryAPI } from "../api/inquiries";
 
-// 問い合わせデータの管理を行うカスタムフック
 export function useInquiries() {
-  const [inquiries, setInquiries] =
-    useState<Inquiry[]>([]);
+  const [inquiries, setInquiries] = useState<Inquiry[]>([]);
+  const [filter, setFilter] = useState<string>("all");
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // 問い合わせを新規登録
-  const addInquiry = (
-    title: string,
-    content: string,
-    requester: string
-  ) => {
-    const newInquiry: Inquiry = {
-      id: Date.now(),
-      title,
-      content,
-      requester,
-      status: "pending",
-      created_at: new Date().toISOString(),
+  useEffect(() => {
+    const fetchInquiries = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+
+        const data = await inquiryAPI.getAll(filter);
+
+        setInquiries(data);
+      } catch {
+        setError("問い合わせの取得に失敗しました");
+      } finally {
+        setIsLoading(false);
+      }
     };
 
-    setInquiries((prev) => [...prev, newInquiry]);
-    
+    fetchInquiries();
+  }, [filter]);
+
+  //stateの更新
+  //登録
+  const addInquiry = (inquiry: Inquiry) => {
+    setInquiries((prev) => [inquiry, ...prev]);
   };
 
-  // 問い合わせのステータスを更新
-  const updateStatus = (
-    id: number,
-    status: InquiryStatus
-  ) => {
+  //更新
+  const updateInquiry = (updated: Inquiry) => {
     setInquiries((prev) =>
-      prev.map((inquiry) =>
-        inquiry.id === id
-          ? { ...inquiry, status }
-          : inquiry
-      )
+      prev.map((i) => (i.id === updated.id ? updated : i)),
     );
   };
 
-  // 問い合わせを削除
-  const deleteInquiry = (id: number) => {
-  setInquiries((prev) =>
-    prev.filter((inquiry) => inquiry.id !== id)
-  );
-};
+  //削除
+  const removeInquiry = (id: number) => {
+    setInquiries((prev) => prev.filter((i) => i.id !== id)); //trueのものだけ残す
+  };
 
   return {
     inquiries,
+    filter,
+    isLoading,
+    error,
     addInquiry,
-    updateStatus,
-    deleteInquiry,
+    updateInquiry,
+    removeInquiry,
+    setFilter,
   };
 }

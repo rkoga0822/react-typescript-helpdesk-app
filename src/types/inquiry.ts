@@ -1,3 +1,4 @@
+//型定義
 export type InquiryStatus = "pending" | "in_progress" | "completed";
 
 export const inquiryStatusLabel: Record<InquiryStatus, string> = {
@@ -14,6 +15,16 @@ export type Inquiry = {
   status: InquiryStatus;
   created_at: string;
 };
+
+export type InquiryCreateInput = {
+  title: string
+  content: string
+  requester: string
+}
+
+export type InquiryStatusUpdateInput = {
+  status:InquiryStatus
+}
 
 export type InquiryFilter = "all" | "pending" | "in_progress" | "completed";
 
