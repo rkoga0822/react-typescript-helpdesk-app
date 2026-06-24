@@ -3,37 +3,57 @@ import styles from "./InquiryCreatePage.module.css";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { Inquiry, InquiryCreateInput } from "../types/inquiry";
+import { inquiryAPI } from "../api/inquiries";
+import axios from "axios";
+
+type LaravelValidationError = {
+  message: string;
+  errors: Record<string, string[]>;
+};
 
 type Props = {
-  onAddInquiry: (title: string, content: string, requester: string) => void;
+  onCreated: (Inquiry: Inquiry) => void;
+  onBack: () => void;
 };
 
 const schema = z.object({
-  title: z.string().min(2, "タイトルは必須です"),
-  content: z.string().min(1, "内容は必須です"),
-  requester: z.string().min(1, "依頼者は必須です"),
+  title: z.string().max(100, "１００文字以内で入力してください"),
+  content: z.string().max(1000, "１０００文字以内で入力してください"),
+  requester: z.string().max(100, "１００文字以内で入力してください"),
 });
 
 type FormData = z.infer<typeof schema>;
 
 // 問い合わせ登録フォーム
-function InquiryCreatePage({ onAddInquiry }: Props) {
+function InquiryCreatePage({ onCreated, onBack }: Props) {
   // React Hook Form + Zod によるフォーム管理
   const {
     register,
     handleSubmit,
-    formState: { errors },
-    reset,
+    setError,
+    formState: { errors, isSubmitting },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
-  // フォーム送信時の処理
-  const onSubmit = (data: FormData) => {
-    onAddInquiry(data.title, data.content, data.requester);
-    reset();
+  const onSubmit = async (data: InquiryCreateInput) => {
+    try {
+      const inquiry = await inquiryAPI.create(data);
+      onCreated(inquiry);
+    } catch (e) {
+      if (axios.isAxiosError(e) && e.response?.status === 422) {
+        const body = e.response.data as LaravelValidationError;
+        Object.entries(body.errors).forEach(([field, messages]) => {
+          setError(field as keyof InquiryCreateInput, {
+            type: "server",
+            message: messages[0],
+          });
+        });
+      }
+    }
   };
 
   return (
-    <form  onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className={styles.form}>
         <input
           className={styles.input}
@@ -58,9 +78,15 @@ function InquiryCreatePage({ onAddInquiry }: Props) {
           placeholder="依頼者"
         />
         {errors.requester && <p>{errors.requester.message}</p>}
-        <Button type="submit" variant="primary">登録</Button>
+        <Button type="submit" variant="primary" disabled={isSubmitting}>
+          {isSubmitting ? "送信中..." : "登録する"}
+        </Button>
+        <Button onClick={onBack} variant="primary">
+          戻る
+        </Button>
       </div>
     </form>
   );
 }
+
 export default InquiryCreatePage;

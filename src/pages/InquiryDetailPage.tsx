@@ -6,14 +6,17 @@ type Props = {
   inquiry: Inquiry;
   onStatusChange: (id: number, status: InquiryStatus) => void;
   onBack: () => void;
+  onDelete:(id:number) => void
 };
 
 // 問い合わせ詳細画面
-function InquiryDetailPage({ inquiry, onStatusChange, onBack }: Props) {
+function InquiryDetailPage({ inquiry, onStatusChange, onBack,onDelete }: Props) {
   return (
     <div className={styles.container}>
+      <h2>{inquiry.title}</h2>
       <p className={styles.row}>内容:{inquiry.content}</p>
       <p className={styles.row}>問い合わせた人:{inquiry.requester}</p>
+      <p className="{styles.row}">作成日時：{inquiry.created_at}</p>
       <div className={styles.row}>
         ステータス：
         <select
@@ -29,6 +32,7 @@ function InquiryDetailPage({ inquiry, onStatusChange, onBack }: Props) {
         </select>
         <br />
         <Button onClick={onBack}>戻る</Button>
+        <Button onClick={() => onDelete(inquiry.id)} variant="danger">削除</Button>
       </div>
     </div>
   );

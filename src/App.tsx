@@ -2,7 +2,7 @@ import { useState } from "react";
 import InquiryListPage from "./pages/InquiryListPage";
 import InquiryDetailPage from "./pages/InquiryDetailPage";
 import InquiryCreatePage from "./pages/InquiryCreatePage";
-import type { InquiryFilter } from "./types/inquiry";
+import type { Inquiry, InquiryFilter, InquiryStatus } from "./types/inquiry";
 import Filter from "./components/Filter";
 import Button from "./components/Button";
 import "./App.css";
@@ -10,10 +10,12 @@ import { filterInquiries } from "./utils/filterInquiries";
 import { usePageNavigation } from "./hooks/usePageNavigation";
 import { useInquiries } from "./hooks/useInquiries";
 import { sortInquiries, type SortType } from "./utils/sortInquiries";
+import { inquiryAPI } from "./api/inquiries";
 function App() {
   //CRUD系まとめたCustomHook
   // 問い合わせデータ管理
-  const { inquiries, addInquiry, updateStatus, deleteInquiry } = useInquiries();
+  const { inquiries, addInquiry, updateInquiry, removeInquiry } =
+    useInquiries();
 
   //ページ遷移のCustomHook
   const { currentPage, selectedId, showList, showCreate, showDetail } =
@@ -36,14 +38,38 @@ function App() {
 
   //追加と追加後listに遷移
   // 問い合わせ登録後は一覧画面へ戻す
-  const handleAddInquiry = (
-    title: string,
-    content: string,
-    requester: string,
-  ) => {
-    addInquiry(title, content, requester);
+  const handleCreated = (inquiry: Inquiry) => {
+    addInquiry(inquiry);
     showList();
   };
+
+  const handleBack = () => {
+    showList();
+  };
+
+  const [actionError, setActionError] = useState<string | null>(null);
+
+  const handleUpdateStatus = async (id: number, status: InquiryStatus) => {
+    setActionError(null);
+    try {
+      const updated = await inquiryAPI.updateStatus(id, status);
+      updateInquiry(updated);
+    } catch {
+      setActionError("ステータスの更新に失敗しました");
+    }
+  };
+
+  const handleDelete = async (id: number) => {
+    if (!confirm("この問い合わせを削除しますか？")) return setActionError(null);
+    try {
+      await inquiryAPI.delete(id);
+      removeInquiry(id);
+      handleBack();
+    } catch {
+      setActionError("削除に失敗しました");
+    }
+  };
+
 
   // フィルター適用
   const filteredInquiries = filterInquiries(inquiries, filter);
@@ -76,21 +102,23 @@ function App() {
         <InquiryListPage
           inquiries={displayedInquiries}
           onSelectInquiry={showDetail}
-          onDeleteInquiry={deleteInquiry}
+          onDeleteInquiry={removeInquiry}
         />
       )}
 
       {currentPage === "detail" && selectedInquiry && (
         <InquiryDetailPage
           inquiry={selectedInquiry}
-          onStatusChange={updateStatus}
+          onStatusChange={handleUpdateStatus}
           onBack={showList}
+          onDelete={handleDelete}
         />
       )}
 
       {currentPage === "create" && (
-        <InquiryCreatePage onAddInquiry={handleAddInquiry} />
+        <InquiryCreatePage onBack={handleBack} onCreated={handleCreated} />
       )}
+      {actionError && <p style={{ color: 'red' }}>{actionError}</p>}
     </div>
   );
 }
